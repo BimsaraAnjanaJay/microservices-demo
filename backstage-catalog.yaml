@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: online-boutique-microservices
+  description: All microservices for the Online Boutique demo application
+spec:
+  targets:
+    - ./catalog-info.yaml
+    - ./infrastructure-catalog-info.yaml
+    - ./src/adservice/catalog-info.yaml
+    - ./src/cartservice/catalog-info.yaml
+    - ./src/checkoutservice/catalog-info.yaml
+    - ./src/currencyservice/catalog-info.yaml
+    - ./src/emailservice/catalog-info.yaml
+    - ./src/frontend/catalog-info.yaml
+    - ./src/loadgenerator/catalog-info.yaml
+    - ./src/paymentservice/catalog-info.yaml
+    - ./src/productcatalogservice/catalog-info.yaml
+    - ./src/recommendationservice/catalog-info.yaml
+    - ./src/shippingservice/catalog-info.yaml
+    - ./src/shoppingassistantservice/catalog-info.yaml

@@ -1,0 +1,63 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: otel-collector
+  description: OpenTelemetry Collector for trace aggregation and export
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - infrastructure
+    - observability
+    - opentelemetry
+    - traces
+  links:
+    - url: http://localhost:16686
+      title: Jaeger UI
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: online-boutique
+  dependsOn:
+    - component:jaeger
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: jaeger
+  description: Jaeger tracing backend for distributed tracing
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - infrastructure
+    - observability
+    - jaeger
+    - traces
+  links:
+    - url: http://localhost:16686
+      title: Jaeger UI
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: online-boutique
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: redis-cart
+  description: Redis cache for cart storage
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - infrastructure
+    - database
+    - redis
+    - cache
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: online-boutique

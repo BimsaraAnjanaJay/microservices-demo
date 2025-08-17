@@ -1,0 +1,23 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: adservice
+  description: Provides advertisement recommendations based on context
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - microservice
+    - java
+    - grpc
+    - ads
+  links:
+    - url: http://localhost:16686/search?service=adservice
+      title: Jaeger Traces
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: online-boutique
+  dependsOn:
+    - component:otel-collector

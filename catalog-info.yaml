@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: online-boutique
+  description: Cloud-native microservices demo application for e-commerce
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - microservices
+    - e-commerce
+    - cloud-native
+    - demo
+spec:
+  owner: team-platform
+  domain: retail
