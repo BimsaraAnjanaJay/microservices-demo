@@ -16,6 +16,7 @@
 
 package hipstershop;
 
+import com.example.adservice.OpenTelemetryConfig;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -37,6 +38,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
 
 public final class AdService {
 
@@ -92,6 +96,9 @@ public final class AdService {
      */
     @Override
     public void getAds(AdRequest req, StreamObserver<AdResponse> responseObserver) {
+      Tracer tracer = OpenTelemetry.getGlobalOpenTelemetry().getTracer("adservice");
+      Span span = tracer.spanBuilder("GetAds").startSpan();
+      
       AdService service = AdService.getInstance();
       try {
         List<Ad> allAds = new ArrayList<>();
@@ -113,7 +120,10 @@ public final class AdService {
         responseObserver.onCompleted();
       } catch (StatusRuntimeException e) {
         logger.log(Level.WARN, "GetAds Failed with status {}", e.getStatus());
+        span.recordException(e);
         responseObserver.onError(e);
+      } finally {
+        span.end();
       }
     }
   }
@@ -221,6 +231,9 @@ public final class AdService {
 
   /** Main launches the server from the command line. */
   public static void main(String[] args) throws IOException, InterruptedException {
+
+    // Initialize OpenTelemetry configuration
+    OpenTelemetryConfig.init();
 
     new Thread(
             () -> {
