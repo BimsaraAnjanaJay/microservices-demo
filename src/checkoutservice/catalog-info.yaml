@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: checkoutservice
+  description: Orchestrates the checkout process and order placement
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - microservice
+    - golang
+    - grpc
+    - checkout
+    - orders
+  links:
+    - url: http://localhost:16686/search?service=checkoutservice
+      title: Jaeger Traces
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-commerce
+  system: online-boutique
+  dependsOn:
+    - component:cartservice
+    - component:currencyservice
+    - component:emailservice
+    - component:paymentservice
+    - component:productcatalogservice
+    - component:shippingservice
+    - component:otel-collector

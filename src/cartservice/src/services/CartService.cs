@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -25,6 +26,7 @@ namespace cartservice.services
     {
         private readonly static Empty Empty = new Empty();
         private readonly ICartStore _cartStore;
+        private static readonly ActivitySource ActivitySource = new ActivitySource("cartservice");
 
         public CartService(ICartStore cartStore)
         {
@@ -33,17 +35,20 @@ namespace cartservice.services
 
         public async override Task<Empty> AddItem(AddItemRequest request, ServerCallContext context)
         {
+            using var activity = ActivitySource.StartActivity("AddItem");
             await _cartStore.AddItemAsync(request.UserId, request.Item.ProductId, request.Item.Quantity);
             return Empty;
         }
 
         public override Task<Cart> GetCart(GetCartRequest request, ServerCallContext context)
         {
+            using var activity = ActivitySource.StartActivity("GetCart");
             return _cartStore.GetCartAsync(request.UserId);
         }
 
         public async override Task<Empty> EmptyCart(EmptyCartRequest request, ServerCallContext context)
         {
+            using var activity = ActivitySource.StartActivity("EmptyCart");
             await _cartStore.EmptyCartAsync(request.UserId);
             return Empty;
         }

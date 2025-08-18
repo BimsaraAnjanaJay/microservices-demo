@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using cartservice.cartstore;
 using cartservice.services;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 
 namespace cartservice
 {
@@ -57,6 +59,18 @@ namespace cartservice
 
 
             services.AddGrpc();
+
+            // Add OpenTelemetry tracing
+            services.AddOpenTelemetryTracing(b =>
+            {
+                b.AddAspNetCoreInstrumentation()
+                 .AddHttpClientInstrumentation()
+                 .AddGrpcClientInstrumentation()
+                 .AddOtlpExporter(opt =>
+                 {
+                     opt.Endpoint = new Uri("http://otel-collector:4317");
+                 });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

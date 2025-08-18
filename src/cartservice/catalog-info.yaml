@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cartservice
+  description: Handles shopping cart operations and storage
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - microservice
+    - csharp
+    - dotnet
+    - grpc
+    - cart
+  links:
+    - url: http://localhost:16686/search?service=cartservice
+      title: Jaeger Traces
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-commerce
+  system: online-boutique
+  dependsOn:
+    - component:redis-cart
+    - component:otel-collector

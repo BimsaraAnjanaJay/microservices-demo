@@ -85,6 +85,11 @@ type checkoutService struct {
 
 func main() {
 	ctx := context.Background()
+	
+	// Initialize OpenTelemetry tracer
+	shutdown := InitTracer()
+	defer shutdown()
+	
 	if os.Getenv("ENABLE_TRACING") == "1" {
 		log.Info("Tracing enabled.")
 		initTracing()
@@ -227,6 +232,10 @@ func (cs *checkoutService) Watch(req *healthpb.HealthCheckRequest, ws healthpb.H
 }
 
 func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (*pb.PlaceOrderResponse, error) {
+	tr := otel.Tracer("checkoutservice")
+	ctx, span := tr.Start(ctx, "PlaceOrder")
+	defer span.End()
+	
 	log.Infof("[PlaceOrder] user_id=%q user_currency=%q", req.UserId, req.UserCurrency)
 
 	orderID, err := uuid.NewUUID()
@@ -366,6 +375,10 @@ func (cs *checkoutService) convertCurrency(ctx context.Context, from *pb.Money, 
 }
 
 func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, paymentInfo *pb.CreditCardInfo) (string, error) {
+	tr := otel.Tracer("checkoutservice")
+	ctx, span := tr.Start(ctx, "ChargeCard")
+	defer span.End()
+	
 	paymentResp, err := pb.NewPaymentServiceClient(cs.paymentSvcConn).Charge(ctx, &pb.ChargeRequest{
 		Amount:     amount,
 		CreditCard: paymentInfo})
