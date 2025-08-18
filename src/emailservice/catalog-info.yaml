@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: emailservice
+  description: Sends order confirmation emails to customers
+  annotations:
+    github.com/project-slug: BimsaraAnjanaJay/microservices-demo
+  tags:
+    - microservice
+    - python
+    - grpc
+    - email
+    - notifications
+  links:
+    - url: http://localhost:16686/search?service=emailservice
+      title: Jaeger Traces
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: online-boutique
+  dependsOn:
+    - component:otel-collector

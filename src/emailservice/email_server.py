@@ -39,6 +39,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 import googlecloudprofiler
 
 from logger import getJSONLogger
+from otel_instrumentation import init_tracer
 logger = getJSONLogger('emailservice-server')
 
 # Loads confirmation email template from file
@@ -163,6 +164,9 @@ def initStackdriverProfiling():
 
 if __name__ == '__main__':
   logger.info('starting the email service in dummy mode.')
+
+  # Initialize OpenTelemetry
+  init_tracer("emailservice")
 
   # Profiler
   try:

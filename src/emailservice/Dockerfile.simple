@@ -1,0 +1,21 @@
+# Simple Dockerfile for testing OpenTelemetry
+FROM python:3.12.8-alpine
+
+# Enable unbuffered logging
+ENV PYTHONUNBUFFERED=1
+
+RUN apk update \
+    && apk add --no-cache g++ linux-headers libstdc++ \
+    && rm -rf /var/cache/apk/*
+
+WORKDIR /email_server
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Add the application
+COPY . .
+
+EXPOSE 8080
+ENTRYPOINT [ "python", "email_server.py" ]
