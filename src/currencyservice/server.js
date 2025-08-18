@@ -136,6 +136,9 @@ function getSupportedCurrencies (call, callback) {
  * Converts between currencies
  */
 function convert (call, callback) {
+  const tracer = require('@opentelemetry/api').trace.getTracer('currencyservice');
+  const span = tracer.startSpan('Convert');
+  
   try {
     _getCurrencyData((data) => {
       const request = call.request;
@@ -160,10 +163,13 @@ function convert (call, callback) {
       result.currency_code = request.to_code;
 
       logger.info(`conversion request successful`);
+      span.end();
       callback(null, result);
     });
   } catch (err) {
     logger.error(`conversion request failed: ${err}`);
+    span.recordException(err);
+    span.end();
     callback(err.message);
   }
 }
